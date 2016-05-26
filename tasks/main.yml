@@ -29,6 +29,7 @@
     skeleton: "{{ item.skeleton | default(sftp_users_skeleton) }}"
     state: "{{ item.state |default('present') }}"
     shell: "{{ item.shell | default(sftp_users_shell) }}"
+  no_log: True
   with_items: "{{ sftp_users }}"
 
 
@@ -39,6 +40,7 @@
     owner: "{{ sftp_data_dir_owner }}"
     group: "{{ item.name }}"
     mode: "{{ sftp_users_home_mode }}"
+  no_log: True
   with_items: "{{ sftp_users }}"
 
 
@@ -48,4 +50,5 @@
     user: "{{ item.name }}"
     key: "{{ item.authorized_keys | join('\n') }}"
     exclusive: True
+  no_log: True
   with_items: "{{ sftp_users }}"
