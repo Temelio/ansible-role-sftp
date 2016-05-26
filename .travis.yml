@@ -47,11 +47,6 @@ script:
     ansible-playbook -i tests/inventory tests/test_travis.yml
     --connection=local --sudo
 
-  # Add idempotence debug
-  - >
-    ansible-playbook -i tests/inventory tests/test_travis.yml
-    --connection=local --sudo
-
   # Run the role/playbook again, checking to make sure it's idempotent.
   - >
     ansible-playbook -i tests/inventory tests/test_travis.yml

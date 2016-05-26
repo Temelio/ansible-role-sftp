@@ -7,7 +7,8 @@
   pre_tasks:
     - name: 'Create SSH keys pair'
       command: 'ssh-keygen -b 2048 -t rsa -f /tmp/sshkey -q -N ""'
-      changed_when: False
+      args: 
+        creates: '/tmp/sshkey'
   roles:
     - "{{ role_name }}"
   post_tasks:
