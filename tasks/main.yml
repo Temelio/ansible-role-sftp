@@ -1,0 +1,51 @@
+---
+
+# Main tasks file for sftp role
+
+- name: 'Ensure data path exists'
+  become: True
+  file:
+    path: "{{ sftp_data_dir_path }}"
+    owner: "{{ sftp_data_dir_owner }}"
+    group: "{{ sftp_data_dir_group }}"
+    mode: "{{ sftp_data_dir_mode }}"
+    state: 'directory'
+
+
+- name: 'Manage sftp users group'
+  become: True
+  group:
+    name: "{{ sftp_users_group_name }}"
+    state: 'present'
+
+
+- name: 'Manage sftp users creation'
+  become: True
+  user:
+    name: "{{ item.name }}"
+    groups: "{{ sftp_users_group_name }}"
+    createhome: True
+    home: "{{ sftp_data_dir_path ~ '/' ~ item.name }}"
+    skeleton: "{{ item.skeleton | default(sftp_users_skeleton) }}"
+    state: "{{ item.state |default('present') }}"
+    shell: "{{ item.shell | default(sftp_users_shell) }}"
+  with_items: "{{ sftp_users }}"
+
+
+- name: 'Manage permissions on users home directory'
+  become: True
+  file:
+    path: "{{ sftp_data_dir_path ~ '/' ~ item.name }}"
+    owner: "{{ sftp_data_dir_owner }}"
+    group: "{{ item.name }}"
+    mode: "{{ sftp_users_home_mode }}"
+  with_items: "{{ sftp_users }}"
+
+
+- name: 'Manage authorized keys'
+  become: True
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.authorized_keys | join('\n') }}"
+    exclusive: True
+  with_items: "{{ sftp_users }}"

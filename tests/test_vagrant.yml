@@ -1,0 +1,21 @@
+---
+
+# Role Vagrant tests
+
+- hosts: all
+  remote_user: vagrant
+  roles:
+    - "{{ role_name }}"
+  post_tasks:
+    - include: ./test_common.yml
+  vars:
+    role_name: "{{ lookup('env','ANSIBLE_ROLE_NAME') }}"
+    sftp_users:
+      - name: 'sftp1'
+        authorized_keys:
+          - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      - name: 'sftp2'
+        authorized_keys:
+          - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        skeleton: "/vagrant/tests/test_skel"
+        shell: '/bin/false'

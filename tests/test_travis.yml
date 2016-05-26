@@ -1,0 +1,21 @@
+---
+
+# Role travis tests
+
+- hosts: localhost
+  remote_user: root
+  roles:
+    - "{{ role_name }}"
+  post_tasks:
+    - include: ./test_common.yml
+  vars:
+    role_name: "{{ lookup('env','TRAVIS_REPO_SLUG') }}"
+    sftp_users:
+      - name: 'sftp1'
+        authorized_keys:
+          - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      - name: 'sftp2'
+        authorized_keys:
+          - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        skeleton: "{{ role_path }}/tests/test_skel"
+        shell: '/bin/false'
