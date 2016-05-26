@@ -4,6 +4,10 @@
 
 - hosts: localhost
   remote_user: root
+  pre_tasks:
+    - name: 'Create SSH keys pair'
+      command: 'ssh-keygen -b 2048 -t rsa -f /tmp/sshkey -q -N ""'
+      changed_when: False
   roles:
     - "{{ role_name }}"
   post_tasks:
@@ -13,7 +17,7 @@
     sftp_users:
       - name: 'sftp1'
         authorized_keys:
-          - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+          - "{{ lookup('file', '/tmp/sshkey.pub') }}"
       - name: 'sftp2'
         authorized_keys:
           - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
