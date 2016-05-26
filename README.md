@@ -50,6 +50,19 @@ files. SSHD configuration is not managed inside the role.
 
 ### Default role variables
 
+    # Path management about sftp users home dir
+    sftp_data_dir_path: '/var/sftp'
+    sftp_data_dir_mode: '0750'
+    sftp_data_dir_owner: 'root'
+    sftp_data_dir_group: "{{ sftp_users_group_name }}"
+
+    # Sftp users management
+    sftp_users_group_name: 'sftp-users'
+    sftp_users_home_mode: '0750'
+    sftp_users_skeleton: '/etc/skel'
+    sftp_users_shell: '/usr/sbin/nologin'
+    sftp_users: []
+
 ### SFTP users format
 
     sftp_users:

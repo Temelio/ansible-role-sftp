@@ -6,7 +6,7 @@
 sftp_data_dir_path: '/var/sftp'
 sftp_data_dir_mode: '0750'
 sftp_data_dir_owner: 'root'
-sftp_data_dir_group: 'root'
+sftp_data_dir_group: "{{ sftp_users_group_name }}"
 
 # Sftp users management
 sftp_users_group_name: 'sftp-users'

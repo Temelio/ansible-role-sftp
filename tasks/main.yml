@@ -2,6 +2,13 @@
 
 # Main tasks file for sftp role
 
+- name: 'Manage sftp users group'
+  become: True
+  group:
+    name: "{{ sftp_users_group_name }}"
+    state: 'present'
+
+
 - name: 'Ensure data path exists'
   become: True
   file:
@@ -10,13 +17,6 @@
     group: "{{ sftp_data_dir_group }}"
     mode: "{{ sftp_data_dir_mode }}"
     state: 'directory'
-
-
-- name: 'Manage sftp users group'
-  become: True
-  group:
-    name: "{{ sftp_users_group_name }}"
-    state: 'present'
 
 
 - name: 'Manage sftp users creation'
