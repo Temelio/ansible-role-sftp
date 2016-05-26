@@ -12,6 +12,16 @@ describe 'skel Ansible role' do
         end
     end
 
+    describe 'datadir directory' do
+        describe file('/var/sftp') do
+            it { should exist }
+            it { should be_directory }
+            it { should be_owned_by 'root' }
+            it { should be_grouped_into 'sftp-users' }
+            it { should be_mode 750 }
+        end
+    end
+
     describe 'first user configuration' do
 
         describe file('/var/sftp/sftp1/.ssh') do
