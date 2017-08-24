@@ -17,6 +17,39 @@
 
 
 - hosts: 'all'
+  pre_tasks:
+    - name: 'PREQUISITES | Prepare SSHd installation'
+      become: True
+      file:
+        path: '/var/run/sshd'
+        state: 'directory'
+        owner: 'root'
+        group: 'root'
+    - name: 'PREREQUISITES | Create skel directories'
+      file:
+        path: "{{ item.path }}"
+        state: "{{ item.state }}"
+      changed_when: False
+      with_items:
+        - path: '/tmp/test_skel'
+          state: 'directory'
+        - path: '/tmp/test_skel/bar'
+          state: 'directory'
+        - path: '/tmp/test_skel/bar/bar.txt'
+          state: 'touch'
+    - name: 'PREREQUISITES | Create local SSH keys pair'
+      become: False
+      command: 'ssh-keygen -b 2048 -t rsa -f /tmp/sshkey -q -N ""'
+      args:
+        creates: '/tmp/sshkey'
+      delegate_to: '127.0.0.1'
+      run_once: True
+  roles:
+    - role: 'willshersystems.sshd'
+      become: True
+
+
+- hosts: 'all'
   roles:
     - role: "{{ role_name }}"
   vars:

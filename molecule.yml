@@ -6,9 +6,19 @@ ansible:
   raw_env_vars:
     ANSIBLE_NOCOWS: 1
   group_vars:
-    all: {}
+    all:
+      sftp_users:
+        - name: 'sftp1'
+          authorized_keys:
+            - "{{ lookup('file', '/tmp/sshkey.pub') }}"
+        - name: 'sftp2'
+          authorized_keys:
+            - "{{ lookup('file', '/tmp/sshkey.pub') }}"
+          skeleton: "/tmp/test_skel"
+          shell: '/bin/false'
 dependency:
   name: 'galaxy'
+  requirements_file: 'tests/requirements.yml'
 driver:
   name: 'docker'
 docker:
