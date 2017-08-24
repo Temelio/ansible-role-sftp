@@ -2,6 +2,13 @@
 
 # Main tasks file for sftp role
 
+- name: 'INIT | Manage variables to use for our target'
+  include: "{{ role_path }}/tasks/manage_variables.yml"
+  tags:
+    - 'role::sftp'
+    - 'role::sftp::init'
+
+
 - name: 'Manage sftp users group'
   become: True
   group:
