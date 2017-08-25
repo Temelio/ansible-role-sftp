@@ -1,18 +1,21 @@
 ---
 
 galaxy_info:
-  author: Alexandre Chaussier
-  description: Ansible role to manage sftp server and its users
-  company: Temelio (http://www.temelio.com)
-  license: MIT
-  min_ansible_version: 2.0
-  github_branch: master
+  author: 'Alexandre Chaussier'
+  description: 'Ansible role to manage sftp server an its users'
+  company: 'Temelio (http://www.temelio.com)'
+  license: 'MIT'
+  min_ansible_version: '2.0'
+  github_branch: 'master'
   platforms:
-    - name: Ubuntu
+    - name: 'Debian'
       versions:
-        - trusty
+        - 'jessie'
+    - name: 'Ubuntu'
+      versions:
+        - 'trusty'
+        - 'xenial'
   galaxy_tags:
-    - system
-    - network
+    - 'system'
+    - 'network'
 dependencies: []
-

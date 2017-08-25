@@ -2,8 +2,7 @@
 
 [![Build Status](https://travis-ci.org/Temelio/ansible-role-sftp.svg?branch=master)](https://travis-ci.org/Temelio/ansible-role-sftp)
 
-Manage SFTP server and users. Only keys authentication is managed, using
-"authorized_keys" ansible module setting exclusive=true.
+Install sftp package.
 
 ## Requirements
 
@@ -12,80 +11,101 @@ and platform requirements are listed in the metadata file.
 
 ## Testing
 
-This role contains two tests methods :
-- locally using Vagrant
-- automatically with Travis
+This role use [Molecule](https://github.com/metacloud/molecule/) to run tests.
 
-### Testing dependencies
-- install [Vagrant](https://www.vagrantup.com)
-- install [Vagrant serverspec plugin](https://github.com/jvoorhis/vagrant-serverspec)
-    $ vagrant plugin install vagrant-serverspec
-- install ruby dependencies
-    $ bundle install
+Locally, you can run tests on Docker (default driver) or Vagrant.
+Travis run tests using Docker driver only.
+
+Currently, tests are done on:
+- Debian Jessie
+- Ubuntu Trusty
+- Ubuntu Xenial
+
+and use:
+- Ansible 2.0.x
+- Ansible 2.1.x
+- Ansible 2.2.x
+- Ansible 2.3.x
 
 ### Running tests
 
-#### Run playbook and test
+#### Using Docker driver
 
-- if Vagrant box not running
-    $ vagrant up
+```
+$ tox
+```
 
-- if Vagrant box running
-    $ vagrant provision
+#### Using Vagrant driver
 
-## SSHd configuration
-
-You need to use the following configuration (at least) in your group/host vars
-files. SSHD configuration is not managed inside the role.
-
-    sshd_Subsystem: 'sftp internal-sftp'
-    sshd_match:
-      - Condition: 'Group {{ sftpd_users_group_name }}'
-        ChrootDirectory: '%h'
-        AllowTCPForwarding: False
-        X11Forwarding: False
-        ForceCommand: 'internal-sftp'
+```
+$ MOLECULE_DRIVER=vagrant tox
+```
 
 ## Role Variables
 
 ### Default role variables
 
-    # Path management about sftp users home dir
-    sftp_data_dir_path: '/var/sftp'
-    sftp_data_dir_mode: '0750'
-    sftp_data_dir_owner: 'root'
-    sftp_data_dir_group: "{{ sftp_users_group_name }}"
+``` yaml
+# Path management about sftp users home dir
+sftp_data_dir_path: '/var/sftp'
+sftp_data_dir_mode: '0750'
+sftp_data_dir_owner: 'root'
+sftp_data_dir_group: "{{ sftp_users_group_name }}"
 
-    # Sftp users management
-    sftp_users_group_name: 'sftp-users'
-    sftp_users_home_mode: '0750'
-    sftp_users_skeleton: '/etc/skel'
-    sftp_users_shell: '/usr/sbin/nologin'
-    sftp_users: []
+# Sftp users management
+sftp_users_group_name: 'sftp-users'
+sftp_users_home_mode: '0750'
+sftp_users_skeleton: '/etc/skel'
+sftp_users_shell: '/usr/sbin/nologin'
+sftp_users: []
+```
 
-### SFTP users format
+## SSHd configuration
 
-    sftp_users:
-      - name: 'my_name'
-        authorized_keys:
-          - 'beautiful_public_key'
-        skeleton: '/etc/skels/sftp-users' *optional*
-        shell: '/bin/false' *optional*
-        state: 'present' *optional*
+Example of SSHd configuration if you use [willshersystems.sshd](https://github.com/willshersystems/ansible-sshd)
 
-* *sftp_users_skeleton* is the default skel if not defined in user entry.
-* *sftp_users_shell* is the default shell if not defined in user entry.
-* *present* is the default user state value.
+
+You can use the following configuration (at least) in your group/host vars
+files. **SSHD configuration is not managed inside the role**.
+
+``` yaml
+sshd_Subsystem: 'sftp internal-sftp'
+sshd_match:
+  - Condition: 'Group {{ sftpd_users_group_name }}'
+    ChrootDirectory: '%h'
+    AllowTCPForwarding: False
+    X11Forwarding: False
+    ForceCommand: 'internal-sftp'
+```
+
+## SFTP users format
+
+``` yaml
+sftp_users:
+  - name: 'my_name'
+    authorized_keys:
+      - 'beautiful_public_key'
+    skeleton: '/etc/skels/sftp-users' *optional*
+    shell: '/bin/false' *optional*
+    state: 'present' *optional*
+```
+
+- *sftp_users_skeleton* is the default skel if not defined in user entry.
+- *sftp_users_shell* is the default shell if not defined in user entry.
+- *present* is the default user state value.
 
 ## Dependencies
 
-* willshersystems.sshd
+No mandatory dependencies, but you can use this role to manage SSHD configuration:
+- [willshersystems.sshd](https://github.com/willshersystems/ansible-sshd)
 
 ## Example Playbook
 
-    - hosts: servers
-      roles:
-         - { role: Temelio.sftp }
+``` yaml
+- hosts: servers
+  roles:
+    - { role: Temelio.sftp }
+```
 
 ## License
 
@@ -96,4 +116,3 @@ MIT
 Alexandre Chaussier (for Temelio company)
 - http://www.temelio.com
 - alexandre.chaussier [at] temelio.com
-

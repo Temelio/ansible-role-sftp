@@ -2,14 +2,24 @@
 
 # Main tasks file for sftp role
 
-- name: 'Manage sftp users group'
+- name: 'INIT | Manage variables to use for our target'
+  include: "{{ role_path }}/tasks/manage_variables.yml"
+  tags:
+    - 'role::sftp'
+    - 'role::sftp::init'
+
+
+- name: 'CONFIG | Manage sftp users group'
   become: True
   group:
     name: "{{ sftp_users_group_name }}"
     state: 'present'
+  tags:
+    - 'role::sftp'
+    - 'role::sftp::config'
 
 
-- name: 'Ensure data path exists'
+- name: 'CONFIG | Ensure data path exists'
   become: True
   file:
     path: "{{ sftp_data_dir_path }}"
@@ -17,9 +27,12 @@
     group: "{{ sftp_data_dir_group }}"
     mode: "{{ sftp_data_dir_mode }}"
     state: 'directory'
+  tags:
+    - 'role::sftp'
+    - 'role::sftp::config'
 
 
-- name: 'Manage sftp users creation'
+- name: 'USERS | Manage sftp users creation'
   become: True
   user:
     name: "{{ item.name }}"
@@ -31,9 +44,12 @@
     shell: "{{ item.shell | default(sftp_users_shell) }}"
   no_log: True
   with_items: "{{ sftp_users }}"
+  tags:
+    - 'role::sftp'
+    - 'role::sftp::users'
 
 
-- name: 'Manage permissions on users home directory'
+- name: 'USERS | Manage permissions on users home directory'
   become: True
   file:
     path: "{{ sftp_data_dir_path ~ '/' ~ item.name }}"
@@ -42,9 +58,12 @@
     mode: "{{ sftp_users_home_mode }}"
   no_log: True
   with_items: "{{ sftp_users }}"
+  tags:
+    - 'role::sftp'
+    - 'role::sftp::users'
 
 
-- name: 'Manage authorized keys'
+- name: 'USERS | Manage authorized keys'
   become: True
   authorized_key:
     user: "{{ item.name }}"
@@ -52,3 +71,6 @@
     exclusive: True
   no_log: True
   with_items: "{{ sftp_users }}"
+  tags:
+    - 'role::sftp'
+    - 'role::sftp::users'
