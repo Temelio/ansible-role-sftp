@@ -1,0 +1,51 @@
+---
+
+dependency:
+  name: 'galaxy'
+driver:
+  name: 'docker'
+lint:
+  name: 'yamllint'
+platforms:
+  - name: 'sftp-docker-jessie'
+    image: 'debian'
+    image_version: 'jessie'
+  - name: 'sftp-docker-trusty'
+    image: 'ubuntu'
+    image_version: 'trusty'
+  - name: 'sftp-docker-xenial'
+    image: 'ubuntu'
+    image_version: 'xenial'
+provisioner:
+  name: 'ansible'
+  lint:
+    name: 'ansible-lint'
+  inventory:
+    group_vars:
+      all:
+        ansible_python_interpreter: '/usr/bin/env python2.7'
+        __sftp_main_config:
+          boolean_options:
+            listen: YES
+            listen_ipv6: NO
+          string_options:
+            listen_address: '127.0.0.1'
+        sftp_users:
+          - name: 'sftp1'
+            authorized_keys:
+              - "{{ lookup('file', '/tmp/sshkey.pub') }}"
+          - name: 'sftp2'
+            authorized_keys:
+              - "{{ lookup('file', '/tmp/sshkey.pub') }}"
+            skeleton: "/tmp/test_skel"
+            shell: '/bin/false'
+scenario:
+  name: 'default'
+verifier:
+  name: 'testinfra'
+  additional_files_or_dirs:
+    - '../../tests'
+  lint:
+    name: 'flake8'
+  options:
+    sudo: True

@@ -1,13 +1,21 @@
 # sftp
 
-[![Build Status](https://travis-ci.org/Temelio/ansible-role-sftp.svg?branch=master)](https://travis-ci.org/Temelio/ansible-role-sftp)
+[![Build Status](https://img.shields.io/travis/Temelio/ansible-role-sftp/master.svg?label=travis_master)](https://travis-ci.org/Temelio/ansible-role-sftp)
+[![Build Status](https://img.shields.io/travis/Temelio/ansible-role-sftp/develop.svg?label=travis_develop)](https://travis-ci.org/Temelio/ansible-role-sftp)
+[![Updates](https://pyup.io/repos/github/Temelio/ansible-role-sftp/shield.svg)](https://pyup.io/repos/github/Temelio/ansible-role-sftp/)
+[![Python 3](https://pyup.io/repos/github/Temelio/ansible-role-sftp/python-3-shield.svg)](https://pyup.io/repos/github/Temelio/ansible-role-sftp/)
+[![Ansible Role](https://img.shields.io/ansible/role/9941.svg)](https://galaxy.ansible.com/Temelio/sftp/)
 
 Install sftp package.
 
 ## Requirements
 
-This role requires Ansible 2.0 or higher,
+This role requires Ansible 2.2 or higher,
 and platform requirements are listed in the metadata file.
+
+It should work on older Ansible version, but without garanty.
+Molecule 2.x has an Ansible 2.2 minimal requirement, so I dont't test on older
+versions.
 
 ## Testing
 
@@ -22,10 +30,9 @@ Currently, tests are done on:
 - Ubuntu Xenial
 
 and use:
-- Ansible 2.0.x
-- Ansible 2.1.x
 - Ansible 2.2.x
 - Ansible 2.3.x
+- Ansible 2.4.x
 
 ### Running tests
 
