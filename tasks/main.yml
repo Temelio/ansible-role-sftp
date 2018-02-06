@@ -32,7 +32,7 @@
     - 'role::sftp::config'
 
 
-- name: 'USERS | Manage sftp users creation'
+- name: 'USERS | Manage sftp users'
   become: True
   user:
     name: "{{ item.name }}"
@@ -40,7 +40,7 @@
     createhome: True
     home: "{{ sftp_data_dir_path ~ '/' ~ item.name }}"
     skeleton: "{{ item.skeleton | default(sftp_users_skeleton) }}"
-    state: "{{ item.state |default('present') }}"
+    state: "{{ item.state | default('present') }}"
     shell: "{{ item.shell | default(sftp_users_shell) }}"
   no_log: True
   with_items: "{{ sftp_users }}"
@@ -58,6 +58,7 @@
     mode: "{{ sftp_users_home_mode }}"
   no_log: True
   with_items: "{{ sftp_users }}"
+  when: "(item.state | default('present')) == 'present'"
   tags:
     - 'role::sftp'
     - 'role::sftp::users'
@@ -71,6 +72,7 @@
     exclusive: True
   no_log: True
   with_items: "{{ sftp_users }}"
+  when: "(item.state | default('present')) == 'present'"
   tags:
     - 'role::sftp'
     - 'role::sftp::users'
