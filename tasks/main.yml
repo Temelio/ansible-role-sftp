@@ -36,9 +36,9 @@
   become: True
   user:
     name: "{{ item.name }}"
-    groups: "{{ sftp_users_group_name }}"
+    groups: "{{ item.groups | default(sftp_users_group_name) }}"
     createhome: True
-    home: "{{ sftp_data_dir_path ~ '/' ~ item.name }}"
+    home: "{{ item.home_path | default(sftp_data_dir_path ~ '/' ~ item.name) }}"
     skeleton: "{{ item.skeleton | default(sftp_users_skeleton) }}"
     state: "{{ item.state | default('present') }}"
     shell: "{{ item.shell | default(sftp_users_shell) }}"
@@ -52,10 +52,10 @@
 - name: 'USERS | Manage permissions on users home directory'
   become: True
   file:
-    path: "{{ sftp_data_dir_path ~ '/' ~ item.name }}"
-    owner: "{{ sftp_data_dir_owner }}"
-    group: "{{ item.name }}"
-    mode: "{{ sftp_users_home_mode }}"
+    path: "{{ item.home_path | default(sftp_data_dir_path ~ '/' ~ item.name) }}"
+    owner: "{{ item.home_owner | default(sftp_data_dir_owner) }}"
+    group: "{{ item.home_group | default(item.name) }}"
+    mode: "{{ item.home_mode | default(sftp_users_home_mode) }}"
   no_log: True
   with_items: "{{ sftp_users }}"
   when: "(item.state | default('present')) == 'present'"
