@@ -7,15 +7,30 @@ driver:
 lint:
   name: 'yamllint'
 platforms:
-  - name: 'sftp-docker-jessie'
-    image: 'debian'
-    image_version: 'jessie'
-  - name: 'sftp-docker-trusty'
-    image: 'ubuntu'
-    image_version: 'trusty'
-  - name: 'sftp-docker-xenial'
-    image: 'ubuntu'
-    image_version: 'xenial'
+  - name: "sftp-docker-jessie"
+    image: 'minimum2scp/systemd-jessie:latest'
+    command: '/sbin/init'
+    cap_add:
+      - 'SYS_PTRACE'
+    privileged: True
+  - name: "sftp-docker-stretch"
+    image: 'minimum2scp/systemd-stretch:latest'
+    command: '/sbin/init'
+    cap_add:
+      - 'SYS_PTRACE'
+    privileged: True
+  - name: "sftp-docker-xenial"
+    image: 'solita/ubuntu-systemd:16.04'
+    command: '/sbin/init'
+    cap_add:
+      - 'SYS_PTRACE'
+    privileged: True
+  - name: "sftp-docker-bionic"
+    image: 'solita/ubuntu-systemd:18.04'
+    command: '/sbin/init'
+    cap_add:
+      - 'SYS_PTRACE'
+    privileged: True
 provisioner:
   name: 'ansible'
   lint:

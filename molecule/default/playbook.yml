@@ -2,10 +2,8 @@
 
 # Role tests
 
-- hosts: 'sftp-vagrant-xenial64:sftp-docker-xenial'
-  name: 'Install tests prerequisites'
-  gather_facts: False
-  tasks:
+- hosts: 'all'
+  pre_tasks:
     - name: 'PREREQUISITES | APT | Do an apt-get update'
       become: True
       raw: 'apt-get update -qq'
@@ -14,10 +12,6 @@
       become: True
       raw: 'apt-get install -qq python2.7'
       changed_when: False
-
-
-- hosts: 'all'
-  pre_tasks:
     - name: 'PREQUISITES | Prepare SSHd installation'
       become: True
       file:

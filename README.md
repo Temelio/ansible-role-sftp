@@ -10,12 +10,10 @@ Install sftp package.
 
 ## Requirements
 
-This role requires Ansible 2.2 or higher,
+This role requires Ansible 2.4 or higher,
 and platform requirements are listed in the metadata file.
 
 It should work on older Ansible version, but without garanty.
-Molecule 2.x has an Ansible 2.2 minimal requirement, so I dont't test on older
-versions.
 
 ## Testing
 
@@ -28,11 +26,13 @@ Currently, tests are done on:
 - Debian Jessie
 - Ubuntu Trusty
 - Ubuntu Xenial
+- Ubuntu Bionic
 
 and use:
-- Ansible 2.2.x
-- Ansible 2.3.x
 - Ansible 2.4.x
+- Ansible 2.5.x
+- Ansible 2.6.x
+- Ansible 2.7.x
 
 ### Running tests
 
@@ -42,10 +42,6 @@ and use:
 $ tox
 ```
 
-#### Using Vagrant driver
-
-```
-$ MOLECULE_DRIVER=vagrant tox
 ```
 
 ## Role Variables
@@ -120,6 +116,5 @@ MIT
 
 ## Author Information
 
-Alexandre Chaussier (for Temelio company)
+A Chaussier, L Machetel (for Temelio company)
 - http://www.temelio.com
-- alexandre.chaussier [at] temelio.com
