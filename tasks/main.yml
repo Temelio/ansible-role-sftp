@@ -3,7 +3,7 @@
 # Main tasks file for sftp role
 
 - name: 'INIT | Manage variables to use for our target'
-  include_tasks: "{{ role_path }}/tasks/manage_variables.yml"
+  include: "{{ role_path }}/tasks/manage_variables.yml"
   tags:
     - 'role::sftp'
     - 'role::sftp::init'
@@ -42,6 +42,7 @@
     skeleton: "{{ item.skeleton | default(sftp_users_skeleton) }}"
     state: "{{ item.state | default('present') }}"
     shell: "{{ item.shell | default(sftp_users_shell) }}"
+    password: "{{ item.password | default(sftp_users_password) }}"
   no_log: True
   with_items: "{{ sftp_users }}"
   tags:
