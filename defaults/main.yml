@@ -14,3 +14,4 @@ sftp_users_home_mode: '0750'
 sftp_users_skeleton: '/etc/skel'
 sftp_users_shell: '/usr/sbin/nologin'
 sftp_users: []
+sftp_users_password: '!'

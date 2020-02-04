@@ -90,11 +90,13 @@ sftp_users:
       - 'beautiful_public_key'
     skeleton: '/etc/skels/sftp-users' *optional*
     shell: '/bin/false' *optional*
+    password: 'password_crypted_value' *optional*
     state: 'present' *optional*
 ```
 
 - *sftp_users_skeleton* is the default skel if not defined in user entry.
 - *sftp_users_shell* is the default shell if not defined in user entry.
+- *sftp_users_password* is the default password if not defined in user entry (a disabled password).
 - *present* is the default user state value.
 
 ## Dependencies
